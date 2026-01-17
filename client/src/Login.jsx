@@ -1,33 +1,69 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./Signup.css"; 
 
 function Login() {
-  return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-secondary">
-      <div className="bg-white p-3 rounded w-25">
-        <h2>Login</h2>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
 
-        <form>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    axios
+      .post("http://localhost:3001/login", { email, password })
+      .then((res) => {
+        // save login info
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+
+        navigate("/store");
+      })
+      .catch((err) => {
+        setErrorMsg(err.response?.data?.message || "Login failed");
+      });
+  };
+
+  return (
+    <div className="pw-bg d-flex justify-content-center align-items-center vh-100">
+      <div className="pw-card">
+        <h3 className="text-center fw-bold mb-1">Welcome Back</h3>
+        <p className="text-center text-muted mb-4">
+          Login to your account
+        </p>
+
+        <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="email"><strong>Email</strong></label>
+            <label className="form-label">Email</label>
             <input
               type="email"
-              id="email"
-              className="form-control rounded-0"
-              placeholder="Enter Email"
+              className="pw-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter email"
             />
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password"><strong>Password</strong></label>
+            <label className="form-label">Password</label>
             <input
               type="password"
-              id="password"
-              className="form-control rounded-0"
-              placeholder="Enter Password"
+              className="pw-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
             />
           </div>
 
-          <button type="submit" className="btn btn-success w-100 rounded-0">
+          {errorMsg && (
+            <div className="alert alert-danger text-center">
+              {errorMsg}
+            </div>
+          )}
+
+          <button type="submit" className="pw-btn">
             Login
           </button>
         </form>
