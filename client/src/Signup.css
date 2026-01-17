@@ -1,0 +1,55 @@
+
+.pw-bg {
+  background: linear-gradient(135deg, #f3f4ff, #eef2ff);
+}
+
+
+.pw-card {
+  background: #ffffff;
+  width: 380px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+.pw-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+}
+
+.pw-input:focus {
+  border-color: #5a4bda;
+  box-shadow: 0 0 0 2px rgba(90, 75, 218, 0.15);
+}
+
+
+.pw-btn {
+  width: 100%;
+  background: #5a4bda;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pw-btn:hover {
+  background: #4839c7;
+}
+
+
+.pw-link {
+  color: #5a4bda;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pw-link:hover {
+  text-decoration: underline;
+}
