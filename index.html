@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PW Clone | Trusted & Affordable Education</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #5a4bda;
+            --text-dark: #1b212d;
+            --text-gray: #757575;
+            --bg-light: #f8f9ff;
+            --white: #ffffff;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* --- 1. Navigation Bar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img {
+            margin-left: 50px;
+            height: 80px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-blue);
+        }
+
+        .btn-all-courses {
+            border: 1px solid #d1d5db;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 50px;
+        }
+
+        /* LOGIN BUTTON BASE */
+.btn-login {
+  background: linear-gradient(135deg, #5b2cff, #8a63ff);
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+/* GLOW + GLANCE EFFECT */
+.glow-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 25px rgba(91, 44, 255, 0.35);
+}
+
+.glow-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  transform: skewX(-25deg);
+}
+
+.glow-btn:hover::before {
+  animation: glance 0.9s ease;
+}
+
+.glow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(138, 99, 255, 0.6);
+}
+
+@keyframes glance {
+  from { left: -75%; }
+  to { left: 130%; }
+}
+
+
+        /* Dropdown Menu (Screenshot 2) */
+        .all-courses-container {
+            position: relative;
+          }
+          
+          /* Dropdown base */
+          .dropdown-content {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            width: 900px;
+            background: white;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+          
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: 0.3s ease;
+            z-index: 999;
+          }
+          
+          /* ✅ Keep visible when hovering parent OR dropdown */
+          .all-courses-container:hover .dropdown-content,
+          .dropdown-content:hover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+          }
+          
+          /* Left menu */
+          .left-menu {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 15px 0 0 15px;
+          }
+          
+          .left-menu a {
+            display: block;
+            padding: 12px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            border-radius: 8px;
+          }
+          
+          .left-menu a:hover,
+          .left-menu a.active {
+            background: #5a4bda;
+            color: white;
+          }
+          
+          /* Right menu */
+          .right-menu {
+            padding: 25px;
+          }
+          
+          .submenu {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+          }
+          
+          .submenu.active {
+            display: grid;
+          }
+          
+          .submenu span {
+            background: #f1f3ff;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+          }
+          
+          .submenu span:hover {
+            background: #5a4bda;
+            color: white;
+          }
+          
+
+        /* --- 2. Banner Slider --- */
+        .slider-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Arrows */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.4);
+            border: none;
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .prev { left: 20px; }
+        .next { right: 20px; }
+        
+        .arrow:hover {
+            background: rgba(0,0,0,0.6);
+        }
+        
+
+        /* --- 3. Description Section (Screenshot 3) --- */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            padding: 80px 10%;
+            gap: 50px;
+        }
+        .hero-section {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 80px 60px;
+          background: linear-gradient(135deg, #f4f6ff, #eef0ff);
+        }
+        
+        .hero-text {
+          max-width: 550px;
+        }
+        
+        .hero-text h1 {
+          font-size: 3rem;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+        
+        .hero-text p {
+          font-size: 1.1rem;
+          color: #666;
+          margin: 25px 0;
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+          background: linear-gradient(135deg, #5b2cff, #8a63ff);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        
+        /* Primary button */
+        .btn-primary {
+          background: linear-gradient(135deg, #5b2cff, #8a63ff);
+          color: #fff;
+          padding: 14px 34px;
+          border-radius: 30px;
+          border: none;
+          font-size: 1.1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        
+        /* Glow + glance */
+        .glow-btn {
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 12px 35px rgba(91,44,255,0.4);
+        }
+        
+        .glow-btn::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -70%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+          transform: skewX(-25deg);
+        }
+        
+        .glow-btn:hover::before {
+          animation: glance 0.9s ease;
+        }
+        
+        .glow-btn:hover {
+          transform: translateY(-3px);
+        }
+        
+        @keyframes glance {
+          from { left: -70%; }
+          to { left: 130%; }
+        }
+        
+        .hero-img img {
+          width: 420px;
+          animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-12px); }
+        }
+        
+        
+
+        .hero-text { opacity: 0; transform: translateY(30px); animation: fadeInUp 1s forwards; }
+        .hero-img { opacity: 0; transform: scale(0.8); animation: zoomIn 1s 0.5s forwards; }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes zoomIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- 4. Stats Row (Screenshot 4) --- */
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 40px 10%;
+            background: var(--bg-light);
+        }
+
+        .stat-card {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .stat-card.visible {
+            animation: slideUp 0.8s forwards;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 5. Exam Categories (Screenshot 5) --- */
+        /* ===============================
+   EXAM CATEGORIES – PW STYLE
+================================ */
+
+.exam-section {
+    padding: 80px 10%;
+    text-align: center;
+  }
+  
+  .exam-section h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  .exam-subtitle {
+    color: #555;
+    margin-bottom: 50px;
+  }
+  
+  /* GRID */
+  .exam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+  }
+  
+  /* CARD */
+  .exam-card {
+    position: relative;
+    background: #fff;
+    border-radius: 24px;
+    padding: 35px;
+    min-height: 220px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    transition: 0.10s ease;
+    cursor: pointer;
+    opacity: 0;
+  transform: translateY(50px);
+  }
+  .exam-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: 0.8s ease;
+  }
+  
+  .exam-card:hover {
+    transform: translateY(-8px);
+  }
+  
+  /* CONTENT */
+  .exam-content {
+    position: relative;
+    z-index: 2;
+    text-align: left;
+  }
+  
+  .exam-content h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  
+  /* TAGS */
+  .exam-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  
+  .exam-tags span {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    background: #f3f4f6;
+    color: #333;
+  }
+  
+  /* EXPLORE BUTTON */
+  .explore-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .explore-btn i {
+    background: #f1f1f1;
+    padding: 8px;
+    border-radius: 50%;
+  }
+  
+  /* RIGHT COLOR ARC */
+  .exam-bg {
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  /* COLOR VARIANTS */
+  .exam-card.neet .exam-bg {
+    background: #fff1f1;
+  }
+  
+  .exam-card.jee .exam-bg {
+    background: #fff5e6;
+  }
+  
+  .exam-card.foundation .exam-bg {
+    background: #fefce8;
+  }
+  
+
+        /* --- 6. Trusted Section (Screenshot 6/7) --- */
+        .trusted-section {
+            padding: 80px 10%;
+            text-align: center;
+        }
+
+        .trusted-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .trusted-box {
+            padding: 40px 20px;
+            border-radius: 15px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .trusted-box img {
+            width: 80px;
+            height: 100px;
+            display: none;
+            margin: 20px auto 0;
+        }
+
+        .trusted-box:hover {
+            transform: translateY(-20px);
+        }
+
+        .trusted-box:hover img {
+            display: block;
+            animation: fadeInUp 0.5s;
+        }
+
+        /* Colors as per screenshots */
+        .bg-cream { background: #fff9e6; }
+        .bg-pink { background: #fff0f0; }
+        .bg-cyan { background: #e6fbff; }
+        .bg-purple { background: #f3f0ff; }
+
+        /* --- 7. Study Resources (Screenshot 8) --- */
+        .study-material-heading {
+          text-align: center;
+          padding: 70px 20px 40px;
+          background: #f9fbff;
+        }
+        
+        .study-material-heading h2 {
+          font-size: 32px;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 10px;
+        }
+        
+        .study-material-heading p {
+          font-size: 16px;
+          color: #555;
+          max-width: 700px;
+          margin: auto;
+          line-height: 1.6;
+        }
+        
+        .resources-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            padding: 80px 10%;
+            align-items: stretch;
+        }
+
+        .resource-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+
+            opacity: 0;
+            transform: translateY(50px);
+            
+        }
+
+        .resource-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: 0.9s ease;
+          }
+          
+          .resource-text {
+            max-width: 60%;
+          }
+          
+          .resource-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+          }
+          
+          .resource-card p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+          }
+          
+          /* IMAGE STYLE */
+          .resource-card img {
+            width: 150px;
+            height: 200px;
+            transition: 0.6s ease;
+            padding-left: 10px;
+          }
+          
+          /* HOVER EFFECT (PW FEEL) */
+          .resource-card:hover img {
+            transform: translateY(-12px) scale(1.05);
+          }
+          
+          .resource-card:hover {
+            transform: translateY(-10px);
+          }
+          .get-started {
+  background: linear-gradient(135deg, #5b2cff, #7f5bff);
+  color: #fff;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.get-started h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.get-started p {
+  font-size: 16px;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.get-started-btn {
+  display: inline-block;
+  padding: 14px 38px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #fff;
+  color: #5b2cff;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.get-started-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+/* ================= GET STARTED CTA ================= */
+
+.get-started {
+  padding: 100px 20px;
+  background: linear-gradient(
+    135deg,
+    #0f2027,
+    #203a43,
+    #2c5364
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.get-started-box {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 70px 50px;
+  text-align: center;
+  max-width: 900px;
+  color: #fff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+}
+
+.get-started-box h2 {
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, #ffdd00, #ff9f00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.get-started-box p {
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto 35px;
+  color: #eaeaea;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* PRIMARY BUTTON */
+.btn-primary {
+  padding: 14px 36px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  background: linear-gradient(135deg, #ff9f00, #ffdd00);
+  color: #1a1a1a;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(255, 221, 0, 0.4);
+}
+
+/* SECONDARY BUTTON */
+.btn-secondary {
+  padding: 14px 36px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+}
+
+
+        /* --- 8. Footer --- */
+        footer {
+            background: #1b212d;
+            color: white;
+            padding: 60px 10% 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+        .footer-col img{
+          width: 1o0px;
+          height: 100px;
+        }
+
+        .footer-col h4 { margin-bottom: 20px; color: #fff; }
+        .footer-col p, .footer-col li { color: #ccc; list-style: none; margin-bottom: 10px; font-size: 14px; }
+
+        .call-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary-blue);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+          <img src="images/logo3.png">
+        </div>
+      
+        <div class="nav-links">
+          <div class="all-courses-container">
+            <a class="nav-item btn-all-courses">
+              All Courses <i class="fas fa-chevron-down"></i>
+            </a>
+      
+            <!-- ✅ DROPDOWN -->
+            <div class="dropdown-content">
+              <div class="left-menu">
+                <a class="active" data-target="comp">Competitive Exams</a>
+                <a data-target="ias">Only IAS</a>
+                <a data-target="school">School Preparation</a>
+                <a data-target="govt">Govt Exams</a>
+              </div>
+      
+              <div class="right-menu">
+                <div id="comp" class="submenu active">
+                  <span>IIT JEE</span>
+                  <span>NEET</span>
+                  <span>ESE</span>
+                  <span>GATE</span>
+                  <span>AE / JE</span>
+                  <span>Olympiad</span>
+                </div>
+      
+                <div id="ias" class="submenu">
+                  <span>UPSC</span>
+                  <span>State PSC</span>
+                </div>
+      
+                <div id="school" class="submenu">
+                  <span>Class 6-10</span>
+                  <span>Class 11-12</span>
+                </div>
+      
+                <div id="govt" class="submenu">
+                  <span>SSC</span>
+                  <span>Railway</span>
+                  <span>Banking</span>
+                </div>
+              </div>
+            </div>
+          </div>
+            <a href="#" class="nav-item">Vidyapeeth</a>
+            <a href="upskill.html" class="nav-item">Upskilling</a>
+            <a href="#" class="nav-item">PW Store</a>
+            <a href="#" class="nav-item">Real Test</a>
+            <a href="#" class="nav-item">Class 1st - 8th</a>
+            <a href="#" class="nav-item btn-login glow-btn">Login/Register</a>
+
+        </div>
+    </nav>
+
+    <div class="slider-container">
+        <button class="arrow prev" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    
+        <div class="slide active">
+            <img src="images/banner1.jpg" alt="Banner 1">
+        </div>
+    
+        <div class="slide">
+            <img src="images/banner2.jpg" alt="Banner 2">
+        </div>
+    
+        <div class="slide">
+            <img src="images/banner3.jpg" alt="Banner 3">
+        </div>
+    
+        <button class="arrow next" onclick="changeSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <section class="hero-section">
+      <div class="hero-text" data-aos="fade-right">
+        <h1>
+          Bharat's 
+          <span class="gradient-text">Trusted & Affordable</span>
+          Educational Platform
+        </h1>
+    
+        <p>
+          Unlock your potential by signing up with Physics Wallah.
+        </p>
+    
+        <button class="btn-primary glow-btn">
+          Get Started
+        </button>
+      </div>
+    
+      <div class="hero-img" data-aos="fade-left">
+        <img src="images/img.jpg" alt="PW App">
+      </div>
+    </section>
+    
+
+    <section class="stats-row">
+        <div class="stat-card">
+            <i class="fas fa-video fa-2x" style="color:red"></i>
+            <h3>Daily Live</h3>
+            <p>Interactive classes</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-file-alt fa-2x" style="color:blue"></i>
+            <h3>10 Million +</h3>
+            <p>Tests & Notes</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-headset fa-2x" style="color:purple"></i>
+            <h3>24 x 7</h3>
+            <p>Doubt Solving</p>
+        </div>
+    </section>
+
+    <section class="exam-section">
+        <h2>Exam Categories</h2>
+        <p class="exam-subtitle">
+          PW is preparing students for 35+ exam categories. Scroll down to find the one you are preparing for
+        </p>
+      
+        <div class="exam-grid">
+      
+          <!-- NEET -->
+          <div class="exam-card neet">
+            <div class="exam-content">
+              <h3>NEET</h3>
+      
+              <div class="exam-tags">
+                <span>Class 11</span>
+                <span>Class 12</span>
+                <span>Dropper</span>
+              </div>
+      
+              <a class="explore-btn">Explore Category <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="exam-bg"></div>
+          </div>
+      
+          <!-- IIT JEE -->
+          <div class="exam-card jee">
+            <div class="exam-content">
+              <h3>IIT JEE</h3>
+      
+              <div class="exam-tags">
+                <span>Class 11</span>
+                <span>Class 12</span>
+                <span>Dropper</span>
+              </div>
+      
+              <a class="explore-btn">Explore Category <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="exam-bg"></div>
+          </div>
+      
+          <!-- Pre Foundation -->
+          <div class="exam-card foundation">
+            <div class="exam-content">
+              <h3>Pre Foundation</h3>
+      
+              <a class="explore-btn">Explore Category <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="exam-bg"></div>
+          </div>
+      
+        </div>
+      </section>
+      
+
+    <section class="trusted-section">
+        <h2>A Platform Trusted by Students</h2>
+        <div class="trusted-grid">
+            <div class="trusted-box bg-cream">
+                <h1>15 Million+</h1>
+                <p>Happy Students</p>
+                <img src="https://th.bing.com/th/id/OIP.dB26Msl_dUo_Im-Z1nZc5gHaEJ?w=333&h=187&c=7&r=0&o=7&dpr=1.5&pid=1.7&rm=3" alt="student">
+            </div>
+            <div class="trusted-box bg-pink">
+                <h1>24000+</h1>
+                <p>Mock Tests</p>
+                <img src="https://th.bing.com/th/id/OIP.s6fWlUotiBkVbB4CwIBTeAHaE8?w=276&h=184&c=7&r=0&o=7&dpr=1.5&pid=1.7&rm=3" alt="test">
+            </div>
+            <div class="trusted-box bg-cyan">
+                <h1>14000+</h1>
+                <p>Video Lectures</p>
+                <img src="https://static.vecteezy.com/system/resources/previews/030/805/488/non_2x/abstract-tree-growing-from-a-book-mental-training-and-education-concept-free-photo.jpg" alt="video">
+            </div>
+            <div class="trusted-box bg-purple">
+                <h1>80000+</h1>
+                <p>Practice Papers</p>
+                <img src="https://img.freepik.com/premium-photo/back-school-children-getting-admission-school-class-room-school-view-4k-hd-wallpaper_1262886-2357.jpg" alt="paper">
+            </div>
+        </div>
+    </section>
+    <section class="study-material-heading">
+      <h2>Study Material</h2>
+      <p>
+        A diverse array of learning materials to enhance your educational journey
+      </p>
+
+    <section class="resources-section reveal-group">
+
+        <div class="resource-card bg-cyan">
+          <div class="resource-text">
+            <h3>Reference Books</h3>
+            <p>
+              Our experts have created thorough study materials that break down
+              complicated concepts into easily understandable content
+            </p>
+          </div>
+          <img src="https://www.shutterstock.com/image-photo/author-buried-piles-books-260nw-2522927257.jpg"
+               alt="Books">
+        </div>
+      
+        <div class="resource-card bg-cream">
+          <div class="resource-text">
+            <h3>NCERT Solutions</h3>
+            <p>Step-by-step solutions to help you master concepts easily</p>
+          </div>
+          <img src="https://media.craiyon.com/2025-07-29/ERb7CsgUR06y4T3ldp9p2w.webp"
+               alt="NCERT">
+        </div>
+      
+        <div class="resource-card bg-purple">
+          <div class="resource-text">
+            <h3>Notes</h3>
+            <p>Simplified notes to revise faster and retain better</p>
+          </div>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSC3XR19TgrRVGUKEJMG1fh1T_QZ117cK1Vx_9_aC9k9g&s"
+               alt="Notes">
+        </div>
+      
+      </section>
+    </section>
+    <!-- ================= GET STARTED CTA ================= -->
+<section class="get-started">
+  <div class="get-started-box">
+    <h2>Start Your Learning Journey Today</h2>
+    <p>
+      Explore high-quality courses, expert guidance, and powerful study
+      resources designed to help you succeed.
+    </p>
+
+    <div class="cta-buttons">
+      <a href="#" class="btn-primary">Get Started</a>
+      <a href="#" class="btn-secondary">Explore Courses</a>
+    </div>
+  </div>
+</section>
+
+
+    <footer>
+        <div class="footer-col">
+            <img src="images/logo1.png" height="40">
+            <p>We are India's leading learning platform.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <li>About Us</li>
+            <li>Contact Us</li>
+            <li>Careers</li>
+        </div>
+        <div class="footer-col">
+            <h4>Courses</h4>
+            <li>NEET</li>
+            <li>JEE</li>
+            <li>UPSC</li>
+        </div>
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <p>Email: support@pw.live</p>
+            <div style="display:flex; gap:10px; font-size:20px;">
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-youtube"></i>
+            </div>
+        </div>
+    </footer>
+
+    <div class="call-btn"><i class="fas fa-phone"></i></div>
+
+    <script>
+        /* ===============================
+           1. HERO SLIDER
+        ================================ */
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(index) {
+            if (index >= slides.length) currentSlide = 0;
+            else if (index < 0) currentSlide = slides.length - 1;
+            else currentSlide = index;
+        
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+        }
+        
+        function changeSlide(step) {
+            showSlide(currentSlide + step);
+        }
+        
+        setInterval(() => changeSlide(1), 5000);
+        
+        
+        /* ===============================
+           2. SCROLL REVEAL (FIXED)
+        ================================ */
+        const observerOptions = { threshold: 0.2 };
+        
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        /* ✅ CORRECT ELEMENTS */
+        document
+          .querySelectorAll('.stat-card, .exam-card, .resource-card')
+          .forEach((el, index) => {
+              el.style.transitionDelay = `${index * 0.15}s`;
+              observer.observe(el);
+          });
+        
+        
+        /* ===============================
+           3. MEGA MENU (OK)
+        ================================ */
+        const leftMenuItems = document.querySelectorAll('.left-menu a');
+        const subMenus = document.querySelectorAll('.submenu');
+        
+        leftMenuItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                leftMenuItems.forEach(i => i.classList.remove('active'));
+                subMenus.forEach(menu => menu.classList.remove('active'));
+        
+                item.classList.add('active');
+                const targetMenu = document.getElementById(item.dataset.target);
+                if (targetMenu) targetMenu.classList.add('active');
+            });
+        });
+        </script>
+        
+        
+</body>
+</html>

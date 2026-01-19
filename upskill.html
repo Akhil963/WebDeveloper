@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upskill | Advanced Learning Platform</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ================= RESET ================= */
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+    body{background:#0f0f14;color:#fff;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+
+    /* ================= NAVBAR ================= */
+    header{
+      position:fixed;top:0;left:0;width:100%;z-index:1000;
+      backdrop-filter:blur(12px);
+      background:rgba(15,15,20,0.85);
+      box-shadow:0 10px 30px rgba(0,0,0,0.5)
+    }
+    .navbar{
+      max-width:1400px;margin:auto;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 40px
+    }
+    .logo{font-size:24px;font-weight:700;color:#ff7a18}
+    .nav-links{display:flex;gap:30px;align-items:center}
+    .nav-item{position:relative;cursor:pointer}
+    .nav-item span{transition:0.3s}
+    .nav-item:hover span{color:#ff7a18;text-shadow:0 0 10px #ff7a18}
+
+    .search-bar input{
+      padding:10px 16px;border-radius:30px;border:none;outline:none;
+      width:220px;background:#1e1e2a;color:#fff
+    }
+    .login-btn{
+      padding:10px 24px;border-radius:30px;border:1px solid #ff7a18;
+      background:transparent;color:#ff7a18;cursor:pointer;transition:0.4s
+    }
+    .login-btn:hover{background:#ff7a18;color:#000;box-shadow:0 0 20px #ff7a18}
+
+    /* ================= DROPDOWNS ================= */
+    .dropdown{
+      position:absolute;top:60px;left:0;width:300px;
+      background:#1b1b26;border-radius:16px;
+      opacity:0;visibility:hidden;transform:translateY(20px);
+      transition:0.4s;box-shadow:0 30px 60px rgba(0,0,0,0.6)
+    }
+    .nav-item:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .dropdown ul{list-style:none;padding:20px}
+    .dropdown li{padding:10px;border-radius:10px;transition:0.3s}
+    .dropdown li:hover{background:#ff7a18;color:#000;transform:translateX(5px)}
+
+    /* ================= HERO SLIDER ================= */
+    .hero{margin-top:90px;position:relative;height:75vh;overflow:hidden}
+    .slides{display:flex;height:100%;transition:1s}
+    .slide{
+      min-width:100%;height:100%;
+      display:flex;align-items:center;justify-content:center;
+      background-size:cover;background-position:center
+    }
+    .slide::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(90deg,#0f0f14,transparent)
+    }
+    .slide h1{font-size:54px;z-index:2}
+
+    /* ================= TEXT SECTION ================= */
+    .intro{text-align:center;padding:80px 20px}
+    .intro h2{font-size:42px;margin-bottom:20px}
+    .intro p{opacity:0.7;margin-bottom:30px}
+    .cta{
+      padding:14px 40px;border-radius:40px;border:none;
+      background:#ff7a18;font-size:16px;font-weight:600;cursor:pointer;
+      transition:0.4s
+    }
+    .cta:hover{transform:scale(1.1);box-shadow:0 0 30px #ff7a18}
+
+    /* ================= ROTATING BAND ================= */
+    .rotating-band{overflow:hidden;padding:40px 0;background:#14141d}
+    .band-track{display:flex;gap:40px;animation:scroll 20s linear infinite}
+    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .profile{
+      min-width:260px;background:#1e1e2a;border-radius:20px;padding:20px;
+      text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.5)
+    }
+    .profile img{width:70px;height:70px;border-radius:50%;margin-bottom:10px}
+
+    /* ================= STATS ================= */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;padding:80px}
+    .stat{
+      background:#1e1e2a;border-radius:20px;padding:40px;text-align:center;
+      transition:0.4s
+    }
+    .stat:hover{transform:translateY(-10px);box-shadow:0 0 40px rgba(255,122,24,0.4)}
+    .stat h3{font-size:40px;color:#ff7a18}
+
+    /* ================= COURSES ================= */
+    .courses{padding:80px}
+    .courses h2{text-align:center;font-size:42px;margin-bottom:50px}
+    .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px}
+    .course{
+      background:#1e1e2a;border-radius:20px;overflow:hidden;
+      transition:0.4s;cursor:pointer
+    }
+    .course img{width:100%;height:180px;object-fit:cover}
+    .course:hover{transform:translateY(-12px);box-shadow:0 0 40px rgba(255,122,24,0.4)}
+    .course div{padding:20px}
+
+    /* ================= FOOTER ================= */
+    footer{text-align:center;padding:40px;background:#0f0f14;opacity:0.6}
+
+    @media(max-width:900px){.stats{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.stats{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <div class="logo">UPSKILL</div>
+    <div class="nav-links">
+      <div class="nav-item"><span>Courses</span>
+        <div class="dropdown">
+          <ul>
+            <li>Data Science & Analytics</li>
+            <li>Software Development</li>
+            <li>Digital Marketing</li>
+            <li>Banking & Finance</li>
+          </ul>
+        </div>
+      </div>
+      <div class="nav-item"><span>Offline Courses</span>
+        <div class="dropdown">
+          <ul>
+            <li>Data Analytics (Offline)</li>
+            <li>Full Stack (Offline)</li>
+            <li>Marketing (Offline)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="search-bar"><input placeholder="Search Course"></div>
+      <button class="login-btn">Login</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="slides" id="slides">
+    <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f')">
+      <h1>Learn Skills That Matter</h1>
+    </div>
+    <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c')">
+      <h1>Build Your Career</h1>
+    </div>
+  </div>
+</section>
+
+<section class="intro">
+  <h2>Future Ready Skills</h2>
+  <p>Gain real‑world job ready skills with mentors</p>
+  <button class="cta">Get Started</button>
+</section>
+
+<section class="rotating-band">
+  <div class="band-track">
+    <div class="profile"><img src="https://i.pravatar.cc/100?1"><h4>Khushboo Jha</h4><p>Banking & Finance</p></div>
+    <div class="profile"><img src="https://i.pravatar.cc/100?2"><h4>Ujjwal Prasad</h4><p>Banking & Finance</p></div>
+    <div class="profile"><img src="https://i.pravatar.cc/100?3"><h4>Dishika Jain</h4><p>Marketing</p></div>
+    <div class="profile"><img src="https://i.pravatar.cc/100?4"><h4>Rahul Verma</h4><p>Data Science</p></div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat"><h3>600+</h3><p>Courses</p></div>
+  <div class="stat"><h3>20+</h3><p>Mentors</p></div>
+  <div class="stat"><h3>100+</h3><p>Placements</p></div>
+  <div class="stat"><h3>55%</h3><p>Avg Salary Hike</p></div>
+</section>
+
+<section class="courses">
+  <h2>Mentor‑Led Courses</h2>
+  <div class="course-grid">
+    <div class="course"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71"><div><h3>Data Science with AI</h3><p>31 Months</p></div></div>
+    <div class="course"><img src="https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0"><div><h3>Data Analytics</h3><p>20 Months</p></div></div>
+    <div class="course"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475"><div><h3>AI Analytics</h3><p>31 Months</p></div></div>
+  </div>
+</section>
+
+<footer>© 2026 Upskill Platform</footer>
+
+<script>
+  let index=0;
+  const slides=document.getElementById('slides');
+  setInterval(()=>{
+    index=(index+1)%2;
+    slides.style.transform=`translateX(-${index*100}%)`;
+  },5000);
+</script>
+
+</body>
+</html>
