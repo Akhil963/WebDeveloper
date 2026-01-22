@@ -25,7 +25,6 @@ function Signup() {
         setSuccessMsg(res.data.message);
         setErrorMsg("");
 
-        // optional: clear fields
         setName("");
         setEmail("");
         setPassword("");
@@ -38,7 +37,8 @@ function Signup() {
   };
 
   return (
-    <div className="pw-bg d-flex justify-content-center align-items-center vh-100">
+    <div className="pw-bg">
+
       <div className="pw-card">
         <h3 className="text-center fw-bold mb-1">Create Account</h3>
         <p className="text-center text-muted mb-4">

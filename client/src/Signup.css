@@ -1,7 +1,15 @@
 
 .pw-bg {
+  width: 100vw;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   background: linear-gradient(135deg, #f3f4ff, #eef2ff);
 }
+
 
 
 .pw-card {
