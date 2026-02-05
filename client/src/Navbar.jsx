@@ -16,7 +16,7 @@ function Navbar() {
       </Link>
 
       <div className="d-flex gap-3 align-items-center">
-        <Link to="/store" className="nav-link">Store</Link>
+        <Link to="/Store" className="nav-link">Store</Link>
         <Link to="/purchases" className="nav-link">My Purchases</Link>
 
         {user && <span>Hello, {user.name}</span>}

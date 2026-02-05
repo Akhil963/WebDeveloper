@@ -1,31 +1,35 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Login from "./Login";
 import Signup from "./Signup";
 import Store from "./Store";
 import ProtectedRoute from "./ProtectedRoute";
-import "bootstrap/dist/css/bootstrap.min.css";
 
+import Home from "./pages/Home";
+import CuriousJr from "./pages/CuriousJr";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Default route */}
-        <Route path="/" element={<Navigate to="/login" />} />
+    <Routes>
+      {/* Public routes */}
+      <Route path="/" element={<Home />} />
+      <Route path="/class-1-8" element={<CuriousJr />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Signup />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Signup />} />
+      {/* Protected route */}
+      <Route
+        path="/store"
+        element={
+          <ProtectedRoute>
+            <Store />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/store"
-          element={
-            <ProtectedRoute>
-              <Store />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+      {/* Catch-all */}
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
 

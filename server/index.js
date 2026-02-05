@@ -89,6 +89,7 @@ app.get("/add-book", async (req, res) => {
     title: "Physics Class 12 Notes",
     price: 299,
     image: "http://localhost:3001/uploads/physics.jpg", // ✅ IMAGE
+    
     pdfPath: "uploads/physics.pdf",                     // ✅ PDF
   });
 
