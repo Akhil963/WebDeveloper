@@ -13,7 +13,6 @@ function Store() {
       .get("http://localhost:3001/books")
       .then((res) => setBooks(res.data))
       .catch(() =>
-        // fallback demo data
         setBooks([
           {
             _id: "1",
@@ -43,7 +42,7 @@ function Store() {
   // 💳 DEMO PAYMENT + PDF DOWNLOAD
   const buyBook = (book) => {
     const options = {
-      key: "rzp_test_1DP5mmOlF5G5ag", // Razorpay TEST key
+      key: "rzp_test_1DP5mmOlF5G5ag",
       amount: book.price * 100,
       currency: "INR",
       name: "PW PDF Store",
@@ -54,9 +53,9 @@ function Store() {
       handler: function () {
         alert("Payment Successful 🎉");
 
-        // ⬇️ Download PDF
+        // ⬇️ ONLY REQUIRED CHANGE IS HERE
         const link = document.createElement("a");
-        link.href = book.pdfUrl;
+        link.href = book.pdfUrl || `http://localhost:3001/${book.pdfPath}`;
         link.download = `${book.title}.pdf`;
         document.body.appendChild(link);
         link.click();
@@ -82,13 +81,11 @@ function Store() {
     <>
       <StoreNavbar userName="Appu" />
 
-      {/* BACKGROUND */}
       <div className="relative min-h-screen pt-32 pb-20 bg-gradient-to-br from-indigo-50 via-white to-pink-50 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl" />
         <div className="absolute top-1/3 -right-40 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-6">
-          {/* HERO */}
           <div className="mb-16">
             <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900">
               Study Materials
@@ -99,7 +96,6 @@ function Store() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-            {/* FILTER */}
             <div className="md:col-span-1 sticky top-32 h-fit">
               <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden">
                 <div className="bg-gradient-to-r from-indigo-600 to-pink-500 px-6 py-4">
@@ -132,7 +128,6 @@ function Store() {
               </div>
             </div>
 
-            {/* BOOKS */}
             <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
               {books
                 .filter(

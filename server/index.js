@@ -1,131 +1,146 @@
+/**************************************************
+ * LOAD ENV FIRST
+ **************************************************/
+require("dotenv").config({ path: "./.env" });
+
+/**************************************************
+ * IMPORTS
+ **************************************************/
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
 const Razorpay = require("razorpay");
-const crypto = require("crypto"); 
+const crypto = require("crypto");
 
+/**************************************************
+ * CREATE APP (VERY IMPORTANT: FIRST)
+ **************************************************/
 const app = express();
 
-
+/**************************************************
+ * MIDDLEWARE
+ **************************************************/
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-
+/**************************************************
+ * MODELS
+ **************************************************/
 const Employee = require("./models/Employee");
-const Book = require("./models/Book");
 
-
+/**************************************************
+ * MONGODB CONNECTION
+ **************************************************/
 mongoose
-  .connect("mongodb://127.0.0.1:27017/employeedb")
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.error(err));
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Atlas connected"))
+  .catch((err) => console.error("❌ MongoDB error:", err));
 
-
-const razorpay = new Razorpay({
-  key_id: "YOUR_KEY_ID",        // 🔴 PUT REAL KEY
-  key_secret: "YOUR_SECRET",   // 🔴 PUT REAL SECRET
+mongoose.connection.once("open", () => {
+  console.log("CONNECTED TO DB:", mongoose.connection.name);
 });
 
+/**************************************************
+ * DEBUG ROUTE (TEMP – VERY IMPORTANT)
+ **************************************************/
+app.get("/debug-db", async (req, res) => {
+  const collections = await mongoose.connection.db
+    .listCollections()
+    .toArray();
 
-app.post("/register", async (req, res) => {
-  try {
-    const { name, email, password, confirmPassword } = req.body;
+  const books = await mongoose.connection.db
+    .collection("books")
+    .find({})
+    .toArray();
 
-    if (!name || !email || !password || !confirmPassword) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
-    }
-
-    const existingUser = await Employee.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already registered" });
-    }
-
-    const employee = await Employee.create({
-      name,
-      email,
-      password: password.trim(),
-    });
-
-    res.status(201).json({
-      message: "Employee registered successfully",
-      employee,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-
-app.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await Employee.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User not found" });
-
-    if (user.password !== password.trim())
-      return res.status(400).json({ message: "Invalid password" });
-
-    res.json({
-      message: "Login successful",
-      token: "dummy-token",
-      user,
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
-
-app.get("/add-book", async (req, res) => {
-  await Book.create({
-    title: "Physics Class 12 Notes",
-    price: 299,
-    image: "http://localhost:3001/uploads/physics.jpg", // ✅ IMAGE
-    
-    pdfPath: "uploads/physics.pdf",                     // ✅ PDF
+  res.json({
+    db: mongoose.connection.name,
+    collections: collections.map((c) => c.name),
+    booksCount: books.length,
+    booksSample: books,
   });
-
-  res.send("Book added");
 });
 
-
+/**************************************************
+ * BOOK ROUTES (DIRECT DB – GUARANTEED)
+ **************************************************/
 app.get("/books", async (req, res) => {
-  const books = await Book.find();
-  res.json(books);
+  const books = await mongoose.connection.db
+    .collection("books")
+    .find({})
+    .toArray();
+
+  console.log("RAW BOOK COUNT:", books.length);
+
+  const fixedBooks = books.map((b) => ({
+    ...b,
+    pdfUrl: `http://localhost:3001/download/${b._id}`,
+  }));
+
+  res.json(fixedBooks);
 });
 
 app.get("/download/:id", async (req, res) => {
-  const book = await Book.findById(req.params.id);
+  const book = await mongoose.connection.db
+    .collection("books")
+    .findOne({ _id: new mongoose.Types.ObjectId(req.params.id) });
+
   if (!book) return res.status(404).send("Book not found");
 
   res.download(book.pdfPath);
 });
 
+/**************************************************
+ * AUTH ROUTES
+ **************************************************/
+app.post("/register", async (req, res) => {
+  const { name, email, password, confirmPassword } = req.body;
 
+  if (password !== confirmPassword)
+    return res.status(400).json({ message: "Passwords do not match" });
 
-app.post("/create-order", async (req, res) => {
-  try {
-    const { amount } = req.body;
+  const existingUser = await Employee.findOne({ email });
+  if (existingUser)
+    return res.status(400).json({ message: "Email already registered" });
 
-    const order = await razorpay.orders.create({
-      amount: amount * 100,
-      currency: "INR",
-    });
+  const employee = await Employee.create({ name, email, password });
 
-    res.json(order);
-  } catch (err) {
-    res.status(500).json({ message: "Payment error" });
-  }
+  res.status(201).json({
+    message: "Employee registered successfully",
+    user: employee,
+  });
 });
 
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await Employee.findOne({ email });
+  if (!user || user.password !== password)
+    return res.status(400).json({ message: "Invalid credentials" });
+
+  res.json({ token: "dummy-token", user });
+});
+
+/**************************************************
+ * RAZORPAY
+ **************************************************/
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
+
+app.post("/create-order", async (req, res) => {
+  const { amount } = req.body;
+
+  const order = await razorpay.orders.create({
+    amount: amount * 100,
+    currency: "INR",
+  });
+
+  res.json(order);
+});
 
 app.post("/verify-payment", async (req, res) => {
   const {
@@ -133,26 +148,38 @@ app.post("/verify-payment", async (req, res) => {
     razorpay_payment_id,
     razorpay_signature,
     bookId,
+    userId,
   } = req.body;
 
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expectedSignature = crypto
-    .createHmac("sha256", "YOUR_SECRET") // 🔴 SAME SECRET
+    .createHmac("sha256", process.env.RAZORPAY_SECRET)
     .update(body)
     .digest("hex");
 
-  if (expectedSignature === razorpay_signature) {
-    res.json({
-      success: true,
-      downloadUrl: `http://localhost:3001/download/${bookId}`,
-    });
-  } else {
-    res.status(400).json({ success: false });
-  }
+  if (expectedSignature !== razorpay_signature)
+    return res.status(400).json({ success: false });
+
+  await Employee.findByIdAndUpdate(userId, {
+    $push: {
+      purchases: {
+        itemId: bookId,
+        itemType: "pdf",
+        progress: 0,
+      },
+    },
+  });
+
+  res.json({
+    success: true,
+    downloadUrl: `http://localhost:3001/download/${bookId}`,
+  });
 });
 
-
-app.listen(3001, () => {
-  console.log("Server started on port 3001");
+/**************************************************
+ * SERVER START
+ **************************************************/
+app.listen(process.env.PORT || 3001, () => {
+  console.log("🚀 Server running on port 3001");
 });

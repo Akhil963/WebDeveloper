@@ -7,6 +7,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import Home from "./pages/Home";
 import CuriousJr from "./pages/CuriousJr";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -17,12 +18,21 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Signup />} />
 
-      {/* Protected route */}
+      {/* Protected routes */}
       <Route
         path="/store"
         element={
           <ProtectedRoute>
             <Store />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         }
       />
