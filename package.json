@@ -1,12 +1,16 @@
 {
   "name": "mern-bookstore",
   "version": "1.0.0",
-  "main": "server/server.js",
+  "main": "server/index.js",
   "scripts": {
     "build": "cd client && npm install && npm run build",
-    "start": "cd server && npm install && node server.js"
+    "start": "node server/index.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.0",
     "razorpay": "^2.9.6"
   }
 }
