@@ -34,7 +34,6 @@ mongoose
 
 // ------------------- ROUTES ------------------- //
 
-// Get Books
 app.get("/api/books", async (req, res) => {
   try {
     const books = await mongoose.connection.db
@@ -53,7 +52,6 @@ app.get("/api/books", async (req, res) => {
   }
 });
 
-// Download PDF
 app.get("/api/download/:id", async (req, res) => {
   try {
     const book = await mongoose.connection.db
@@ -68,7 +66,6 @@ app.get("/api/download/:id", async (req, res) => {
   }
 });
 
-// Register
 app.post("/api/register", async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
@@ -91,7 +88,6 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// Login
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -118,7 +114,6 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET,
 });
 
-// Create Order
 app.post("/api/create-order", async (req, res) => {
   try {
     const { amount } = req.body;
@@ -130,12 +125,10 @@ app.post("/api/create-order", async (req, res) => {
 
     res.json(order);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Order creation failed" });
   }
 });
 
-// Verify Payment
 app.post("/api/verify-payment", async (req, res) => {
   try {
     const {
@@ -171,19 +164,17 @@ app.post("/api/verify-payment", async (req, res) => {
       downloadUrl: `/api/download/${bookId}`,
     });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ success: false });
   }
 });
 
-// ------------------- Serve React in Production ------------------- //
+// ------------------- Serve Vite Build ------------------- //
 
 if (process.env.NODE_ENV === "production") {
-  const clientPath = path.join(__dirname, "../client/build");
+  const clientPath = path.join(__dirname, "../client/dist"); // ✅ changed to dist
 
   app.use(express.static(clientPath));
 
-  // FIX for Express 5 (no wildcard "*")
   app.use((req, res) => {
     res.sendFile(path.join(clientPath, "index.html"));
   });
