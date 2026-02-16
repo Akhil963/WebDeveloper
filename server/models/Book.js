@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// 🔥 FORCE MODEL RE-CREATION (IMPORTANT)
 delete mongoose.models.Book;
 
 const bookSchema = new mongoose.Schema(
