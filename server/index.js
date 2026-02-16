@@ -1,4 +1,11 @@
-require("dotenv").config();
+// Load environment variables FIRST
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
+console.log("MONGO:", process.env.MONGO_URI ? "Exists" : "Missing");
+console.log("RAZORPAY KEY:", process.env.RAZORPAY_KEY_ID ? "Exists" : "Missing");
+console.log("RAZORPAY SECRET:", process.env.RAZORPAY_SECRET ? "Exists" : "Missing");
 
 const express = require("express");
 const cors = require("cors");
@@ -16,11 +23,14 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const Employee = require("./models/Employee");
 
-// MongoDB Connection
+// ------------------- MongoDB Connection ------------------- //
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Atlas connected"))
-  .catch((err) => console.error("MongoDB error:", err));
+  .catch((err) => {
+    console.error("❌ MongoDB error:", err);
+    process.exit(1);
+  });
 
 // ------------------- ROUTES ------------------- //
 
@@ -96,7 +106,13 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// Razorpay Setup
+// ------------------- Razorpay Setup ------------------- //
+
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_SECRET) {
+  console.error("❌ Razorpay keys missing!");
+  process.exit(1);
+}
+
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_SECRET,
@@ -114,6 +130,7 @@ app.post("/api/create-order", async (req, res) => {
 
     res.json(order);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Order creation failed" });
   }
 });
@@ -154,11 +171,12 @@ app.post("/api/verify-payment", async (req, res) => {
       downloadUrl: `/api/download/${bookId}`,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ success: false });
   }
 });
 
-// ------------------- PRODUCTION FRONTEND ------------------- //
+// ------------------- Serve React in Production ------------------- //
 
 if (process.env.NODE_ENV === "production") {
   const clientPath = path.join(__dirname, "../client/build");
@@ -170,7 +188,8 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Start Server
+// ------------------- Start Server ------------------- //
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
