@@ -16,7 +16,7 @@ const crypto = require("crypto");
 
 const app = express();
 
-// Middleware
+// ------------------- Middleware ------------------- //
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -183,7 +183,8 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(express.static(clientPath));
 
-  app.get("*", (req, res) => {
+  // FIX for Express 5 (no wildcard "*")
+  app.use((req, res) => {
     res.sendFile(path.join(clientPath, "index.html"));
   });
 }
