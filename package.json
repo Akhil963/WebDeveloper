@@ -1,10 +1,12 @@
 {
+  "name": "mern-bookstore",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "scripts": {
+    "build": "cd client && npm install && npm run build",
+    "start": "cd server && npm install && node server.js"
+  },
   "dependencies": {
     "razorpay": "^2.9.6"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.24",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18"
   }
 }
